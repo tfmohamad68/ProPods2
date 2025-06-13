@@ -1,0 +1,16 @@
+import { CustomException } from 'src/utils/custom-exception';
+
+export class TwentyORMException extends CustomException {
+  constructor(message: string, code: TwentyORMExceptionCode) {
+    super(message, code);
+  }
+}
+
+export enum TwentyORMExceptionCode {
+  METADATA_VERSION_MISMATCH = 'METADATA_VERSION_MISMATCH',
+  WORKSPACE_SCHEMA_NOT_FOUND = 'WORKSPACE_SCHEMA_NOT_FOUND',
+  ROLES_PERMISSIONS_VERSION_NOT_FOUND = 'ROLES_PERMISSIONS_VERSION_NOT_FOUND',
+  FEATURE_FLAG_MAP_VERSION_NOT_FOUND = 'FEATURE_FLAG_MAP_VERSION_NOT_FOUND',
+  USER_WORKSPACE_ROLE_MAP_VERSION_NOT_FOUND = 'USER_WORKSPACE_ROLE_MAP_VERSION_NOT_FOUND',
+  MALFORMED_METADATA = 'MALFORMED_METADATA',
+}

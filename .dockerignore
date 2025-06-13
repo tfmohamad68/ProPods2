@@ -1,0 +1,75 @@
+# Dependencies
+node_modules
+.yarn/cache
+.yarn/unplugged
+.yarn/install-state.gz
+.pnp.*
+
+# Testing
+coverage
+.nyc_output
+
+# Build outputs
+dist
+build
+.next
+out
+.nx/cache
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# Git
+.git
+.gitignore
+
+# CI/CD
+.github
+.gitlab-ci.yml
+.travis.yml
+
+# Documentation
+DEPLOYMENT.md
+docs
+
+# Development files
+.eslintrc*
+.prettierrc*
+jest.config.*
+*.test.*
+*.spec.*
+__tests__
+__mocks__
+
+# Storybook
+.storybook
+storybook-static
+
+# Other
+.dockerignore
+docker-compose*.yml
+deploy/
+key.json

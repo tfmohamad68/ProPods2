@@ -1,0 +1,86 @@
+{
+  "version": "0.2.0",
+  "resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"],
+  "configurations": [
+    {
+      "name": "twenty-server - start debug",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "nx",
+        "run",
+        "twenty-server:start"
+      ],
+      "outputCapture": "std",
+      "internalConsoleOptions": "openOnSessionStart",
+      "console": "internalConsole",
+      "cwd": "${workspaceFolder}/packages/twenty-server/"
+    },
+    {
+      "name": "twenty-server - worker debug",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "nx",
+        "run",
+        "twenty-server:worker"
+      ],
+      "outputCapture": "std",
+      "internalConsoleOptions": "openOnSessionStart",
+      "console": "internalConsole",
+      "cwd": "${workspaceFolder}/packages/twenty-server/"
+    },
+    {
+      "name": "twenty-server - command debug example",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npx",
+      "runtimeVersion": "^22.12.0",
+      "runtimeArgs": [
+        "nx",
+        "run",
+        "twenty-server:command",
+        "my-command",
+        "--my-parameter value"
+      ],
+      "outputCapture": "std",
+      "internalConsoleOptions": "openOnSessionStart",
+      "console": "internalConsole",
+      "cwd": "${workspaceFolder}/packages/twenty-server/"
+    },
+    {
+      "name": "Playwright Test current file",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["nx", "test", "twenty-e2e-testing", "${file}"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "internalConsoleOptions": "neverOpen",
+      "envFile": "${workspaceFolder}/packages/twenty-e2e-testing/.env"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "twenty-server - debug integration test file (to launch with test file open)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "nx",
+        "run",
+        "twenty-server:jest",
+        "--",
+        "--config",
+        "./jest-integration.config.ts",
+        "${relativeFile}"
+      ],
+      "cwd": "${workspaceFolder}/packages/twenty-server",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "env": {
+        "NODE_ENV": "test"
+      },
+    }
+  ]
+}
