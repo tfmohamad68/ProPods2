@@ -1,4 +1,4 @@
-name: Build and Deploy to GCP
+name: Fast Deploy to GCP (Official Image)
 
 on:
   push:
@@ -14,36 +14,9 @@ env:
   GAR_LOCATION: us-central1
   SERVICE: propods-crm
   REGION: us-central1
-  REPOSITORY: propods-crm
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Run tests
-        run: |
-          yarn nx run twenty-front:test || true
-          yarn nx run twenty-server:test || true
-        continue-on-error: true
-
-      - name: Build application
-        run: |
-          yarn nx run twenty-front:build
-          yarn nx run twenty-server:build
-
   deploy:
-    needs: build
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production'
     runs-on: ubuntu-latest
     permissions:
@@ -65,25 +38,13 @@ jobs:
         with:
           project_id: ${{ env.PROJECT_ID }}
 
-      - name: Configure Docker
-        run: |
-          gcloud auth configure-docker ${{ env.GAR_LOCATION }}-docker.pkg.dev
-
-      - name: Build and Push Container
-        run: |
-          docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}" \
-            --build-arg REACT_APP_SERVER_BASE_URL=https://crm.4ow4.com \
-            --build-arg APP_VERSION=${{ github.sha }} \
-            .
-          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}"
-
       - name: Deploy to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: ${{ env.SERVICE }}
           region: ${{ env.REGION }}
-          image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}
+          image: twentycrm/twenty:latest
           env_vars: |
             NODE_ENV=production
             SERVER_URL=https://crm.4ow4.com
@@ -100,7 +61,7 @@ jobs:
         with:
           service: ${{ env.SERVICE }}-worker
           region: ${{ env.REGION }}
-          image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}
+          image: twentycrm/twenty:latest
           args: |
             yarn,worker:prod
           env_vars: |
