@@ -51,3 +51,13 @@ mcp.json
 key.json
 *.key
 gcp-key.json
+# Twenty CRM
+.env
+*.sql
+/backups/
+node_modules/
+.local-storage/
+
+# System
+.DS_Store
+*.log
