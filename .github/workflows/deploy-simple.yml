@@ -1,0 +1,48 @@
+name: Simple Deploy to GCP
+
+on:
+  workflow_dispatch:
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  SERVICE: propods-crm
+  REGION: us-central1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Google Auth
+        id: auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Set up Cloud SDK
+        uses: 'google-github-actions/setup-gcloud@v2'
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Deploy to Cloud Run (Simple)
+        run: |
+          gcloud run deploy ${{ env.SERVICE }} \
+            --image twentycrm/twenty:latest \
+            --region ${{ env.REGION }} \
+            --allow-unauthenticated \
+            --port 3000 \
+            --memory 2Gi \
+            --cpu 2 \
+            --set-env-vars NODE_ENV=production,SERVER_URL=https://crm.4ow4.com \
+            --project ${{ env.PROJECT_ID }}
+
+      - name: Get Service URL
+        run: |
+          SERVICE_URL=$(gcloud run services describe ${{ env.SERVICE }} --region ${{ env.REGION }} --format 'value(status.url)' --project ${{ env.PROJECT_ID }})
+          echo "Service deployed at: $SERVICE_URL"
