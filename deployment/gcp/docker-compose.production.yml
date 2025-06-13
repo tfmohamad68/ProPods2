@@ -1,0 +1,94 @@
+name: twenty
+
+services:
+  server:
+    image: twentycrm/twenty:v0.32.0
+    volumes:
+      - server-local-data:/app/packages/twenty-server/.local-storage
+    ports:
+      - "3000:3000"
+    environment:
+      # Core settings
+      NODE_ENV: production
+      PORT: 3000
+      PG_DATABASE_URL: postgres://postgres:fRz5l2Fj3X6w5ZvY@db:5432/default
+      SERVER_URL: https://crm.4ow4.com
+      FRONT_BASE_URL: https://crm.4ow4.com
+      REDIS_URL: redis://redis:6379
+      
+      # Secrets
+      APP_SECRET: HWzpVF/px3GQl6nLhm8QccXDYlJbuMQ17wKhuQlls8Q=
+      ACCESS_TOKEN_SECRET: super-secret-access-token-please-change-in-production
+      REFRESH_TOKEN_SECRET: super-secret-refresh-token-please-change-in-production
+      LOGIN_TOKEN_SECRET: super-secret-login-token-please-change-in-production
+      
+      # Storage
+      STORAGE_TYPE: local
+      
+      # Auth
+      AUTH_PASSWORD_ENABLED: "true"
+      SIGN_IN_PREFILLED: "false"
+      SIGN_UP_DISABLED: "false"
+      
+      # Email
+      EMAIL_FROM_ADDRESS: noreply@crm.4ow4.com
+      EMAIL_FROM_NAME: ProPods CRM
+      EMAIL_SYSTEM_ADDRESS: system@crm.4ow4.com
+      EMAIL_DRIVER: logger
+
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+  worker:
+    image: twentycrm/twenty:v0.32.0
+    command: ["yarn", "worker:prod"]
+    environment:
+      PG_DATABASE_URL: postgres://postgres:fRz5l2Fj3X6w5ZvY@db:5432/default
+      SERVER_URL: https://crm.4ow4.com
+      REDIS_URL: redis://redis:6379
+      APP_SECRET: HWzpVF/px3GQl6nLhm8QccXDYlJbuMQ17wKhuQlls8Q=
+      ACCESS_TOKEN_SECRET: super-secret-access-token-please-change-in-production
+      REFRESH_TOKEN_SECRET: super-secret-refresh-token-please-change-in-production
+      STORAGE_TYPE: local
+      EMAIL_FROM_ADDRESS: noreply@crm.4ow4.com
+      EMAIL_FROM_NAME: ProPods CRM
+      EMAIL_SYSTEM_ADDRESS: system@crm.4ow4.com
+      EMAIL_DRIVER: logger
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      server:
+        condition: service_started
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: fRz5l2Fj3X6w5ZvY
+      POSTGRES_DB: default
+    healthcheck:
+      test: pg_isready -U postgres -h localhost
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+
+volumes:
+  db-data:
+  server-local-data:
+  redis-data:
