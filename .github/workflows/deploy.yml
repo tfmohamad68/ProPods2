@@ -89,10 +89,10 @@ jobs:
             SERVER_URL=https://crm.4ow4.com
             STORAGE_TYPE=gcs
           secrets: |
-            PG_DATABASE_URL=projects/${{ env.PROJECT_ID }}/secrets/pg-database-url:latest
-            REDIS_URL=projects/${{ env.PROJECT_ID }}/secrets/redis-url:latest
-            APP_SECRET=projects/${{ env.PROJECT_ID }}/secrets/app-secret:latest
-            EMAIL_SMTP_PASSWORD=projects/${{ env.PROJECT_ID }}/secrets/email-smtp-password:latest
+            PG_DATABASE_URL=pg-database-url:latest
+            REDIS_URL=redis-url:latest
+            APP_SECRET=app-secret:latest
+            EMAIL_SMTP_PASSWORD=email-smtp-password:latest
 
       - name: Deploy Worker to Cloud Run
         id: deploy-worker
@@ -109,10 +109,10 @@ jobs:
             STORAGE_TYPE=gcs
             DISABLE_DB_MIGRATIONS=true
           secrets: |
-            PG_DATABASE_URL=projects/${{ env.PROJECT_ID }}/secrets/pg-database-url:latest
-            REDIS_URL=projects/${{ env.PROJECT_ID }}/secrets/redis-url:latest
-            APP_SECRET=projects/${{ env.PROJECT_ID }}/secrets/app-secret:latest
-            EMAIL_SMTP_PASSWORD=projects/${{ env.PROJECT_ID }}/secrets/email-smtp-password:latest
+            PG_DATABASE_URL=pg-database-url:latest
+            REDIS_URL=redis-url:latest
+            APP_SECRET=app-secret:latest
+            EMAIL_SMTP_PASSWORD=email-smtp-password:latest
 
       - name: Show Output
         run: |
