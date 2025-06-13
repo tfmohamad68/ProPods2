@@ -39,7 +39,9 @@ jobs:
             --port 3000 \
             --memory 2Gi \
             --cpu 2 \
+            --add-cloudsql-instances ${{ env.PROJECT_ID }}:us-central1:propods-crm-db \
             --set-env-vars NODE_ENV=production,SERVER_URL=https://crm.4ow4.com \
+            --set-secrets PG_DATABASE_URL=pg-database-url:latest,REDIS_URL=redis-url:latest,APP_SECRET=app-secret:latest \
             --project ${{ env.PROJECT_ID }}
 
       - name: Get Service URL
