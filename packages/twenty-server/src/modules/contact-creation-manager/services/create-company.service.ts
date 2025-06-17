@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import axios, { AxiosInstance } from 'axios';
 import uniqBy from 'lodash.uniqby';
-import { TWENTY_COMPANIES_BASE_URL } from 'twenty-shared/constants';
+import { COMPANIES_BASE_URL } from 'twenty-shared/constants';
 import { ConnectedAccountProvider } from 'twenty-shared/types';
 import { DeepPartial, ILike, Repository } from 'typeorm';
 
@@ -40,7 +40,7 @@ export class CreateCompanyService {
     private readonly objectMetadataRepository: Repository<ObjectMetadataEntity>,
   ) {
     this.httpService = axios.create({
-      baseURL: TWENTY_COMPANIES_BASE_URL,
+      baseURL: COMPANIES_BASE_URL,
     });
   }
 
