@@ -13,5 +13,5 @@ export { FIELD_RESTRICTED_ADDITIONAL_PERMISSIONS_REQUIRED } from './FieldRestric
 export { PermissionsOnAllObjectRecords } from './PermissionsOnAllObjectRecords';
 export { QUERY_MAX_RECORDS } from './QueryMaxRecords';
 export { STANDARD_OBJECT_RECORDS_UNDER_OBJECT_RECORDS_PERMISSIONS } from './StandardObjectRecordsUnderObjectRecordsPermissions';
-export { TWENTY_COMPANIES_BASE_URL } from './TwentyCompaniesBaseUrl';
-export { TWENTY_ICONS_BASE_URL } from './TwentyIconsBaseUrl';
+export { COMPANIES_BASE_URL } from './TwentyCompaniesBaseUrl';
+export { ICONS_BASE_URL } from './TwentyIconsBaseUrl';
